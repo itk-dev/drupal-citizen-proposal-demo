@@ -31,3 +31,9 @@ docker compose exec phpfpm vendor/bin/drush --yes config:set system.site page.fr
 
 open "$(docker compose exec phpfpm vendor/bin/drush --uri=$(docker compose port nginx 8080) user:login /)"
 ```
+
+Create a SMTP transport:
+
+``` shell
+open "$(docker compose exec phpfpm vendor/bin/drush --uri=$(docker compose port nginx 8080) user:login /admin/config/system/mailer/transport/add/smtp)"
+```

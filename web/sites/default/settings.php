@@ -864,6 +864,8 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # $settings['migrate_file_public_path'] = '';
 # $settings['migrate_file_private_path'] = '';
 
+$settings['skip_permissions_hardening'] = TRUE;
+
 $databases['default']['default'] = [
   'database' => getenv('DATABASE_DATABASE') ?: 'db',
   'username' => getenv('DATABASE_USERNAME') ?: 'db',
@@ -907,15 +909,3 @@ $settings['citizen_proposal_openid_connect']['openid_connect'] = [
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
 }
-$databases['default']['default'] = array (
-  'database' => 'db',
-  'username' => 'db',
-  'password' => 'db',
-  'prefix' => '',
-  'host' => 'mariadb',
-  'port' => '',
-  'isolation_level' => 'READ COMMITTED',
-  'driver' => 'mysql',
-  'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
-  'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
-);

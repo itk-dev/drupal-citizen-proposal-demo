@@ -99,8 +99,5 @@
                 "      composer remove drupal/core-project-message"
             ]
         }
-    },
-    "require-dev": {
-        "drupal/content_fixtures": "^3.1"
     }
 }

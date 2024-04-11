@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+set -o errexit -o errtrace -o noclobber -o nounset -o pipefail
+IFS=$'\n\t'
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "$script_dir/inc/helper"
+
+section "Starting docker services"
+
+docker_compose pull
+docker_compose up --detach
+docker_compose exec phpfpm composer install
+
+section "Installing site"
+
+drush --yes site:install minimal --site-name='Citizen proposal'
+
+section "Configuring UI"
+
+drush --yes theme:install claro olivero
+drush --yes config:set system.theme admin claro
+drush --yes config:set system.theme default olivero
+drush --yes pm:enable toolbar
+
+section "Installing citizen proposal module"
+
+drush pm:enable citizen_proposal --yes
+drush pm:enable citizen_proposal_openid_connect --yes
+
+section "Creating SMTP transport"
+
+# `drush config:import --partial` requires the config module.
+drush --yes pm:enable config
+drush --yes config:import --partial --source "$(drush php:eval "echo \Drupal::service('extension.list.module')->getPath('citizen_proposal')")/config/site"
+drush --yes pm:uninstall config
+
+# Update local settings to match our development setup
+cp web/sites/example.settings.local.php web/sites/default/settings.local.php
+cat >> web/sites/default/settings.local.php <<-'EOF'
+
+$config['symfony_mailer.mailer_transport.smtp']['configuration']['host'] = 'mail';
+$config['symfony_mailer.mailer_transport.smtp']['configuration']['port'] = '1025';
+
+$config['symfony_mailer.settings']['default_transport'] = 'smtp';
+
+
+$settings['citizen_proposal_openid_connect']['local_test_mode'] = TRUE;
+
+// Define local test users
+//   User id => user info (claims)
+$settings['citizen_proposal_openid_connect']['local_test_users'] = [
+  '1234567890' => [
+    'dk_ssn' => '1234567890',
+    'name' => 'John Doe',
+  ],
+  '2345678901' => [
+    'dk_ssn' => '2345678901',
+    'name' => 'Donald Duck',
+  ],
+];
+
+
+$settings['citizen_proposal']['access_check'] = [
+  // the value must match `drush config:get citizen_proposal.settings user_uuid_claim`
+  'cpr_user_claim' => 'dk_ssn',
+
+  // If one of these match, access is granted.
+
+  // Property accessor path => value(s)
+  'cpr_access_checks' => [
+    // https://danmarksadresser.dk/adressedata/kodelister/kommunekodeliste
+    '[adresse][aktuelAdresse][kommunekode]' => 751,
+  ],
+];
+
+EOF
+
+section "Setting front page"
+
+drush --yes config:set system.site page.front '/citizen-proposal'
+
+section "Opening site"
+
+url="http://$(docker compose port nginx 8080)"
+echo "$url"
+open "$url"
+
+section "Opening admin"
+
+url="$(drush --uri="http://$(docker compose port nginx 8080)" user:login /)"
+echo "$url"
+open "$url"

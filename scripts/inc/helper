@@ -1,0 +1,17 @@
+project_dir=$(cd "$(dirname "$script_dir")" && pwd)
+
+function section() {
+  echo
+  echo "$(tput -Txterm-256color bold)$*$(tput -Txterm-256color sgr0)"
+  echo
+}
+
+function docker_compose() {
+  docker compose "$@"
+}
+
+function drush() {
+  docker_compose exec phpfpm vendor/bin/drush --yes "$@"
+}
+
+cd "$project_dir"

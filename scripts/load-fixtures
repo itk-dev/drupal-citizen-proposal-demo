@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -o errexit -o errtrace -o noclobber -o nounset -o pipefail
+IFS=$'\n\t'
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "$script_dir/inc/helper"
+
+docker_compose exec phpfpm composer require --dev drupal/content_fixtures
+drush --yes pm:enable citizen_proposal_fixtures
+drush --yes content-fixtures:load --groups=citizen_proposal
+drush --yes pm:uninstall content_fixtures
+docker_compose exec phpfpm composer remove --dev drupal/content_fixtures

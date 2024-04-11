@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eec6fab719ccca167a0e91b859a6bc7f",
+    "content-hash": "2840e5b0e645bc6656d8f786ef4ce639",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1289,7 +1289,7 @@
             "dist": {
                 "type": "path",
                 "url": "web/modules/contrib/citizen_proposal",
-                "reference": "6a04bdedaf93a9f91fe64fce4f04daa96a491093"
+                "reference": "4c700d7a2ff2667d55a7e70381c5253f1b388f15"
             },
             "require": {
                 "drupal/better_exposed_filters": "^6.0",
@@ -9701,67 +9701,12 @@
             "time": "2024-02-05T22:04:31+00:00"
         }
     ],
-    "packages-dev": [
-        {
-            "name": "drupal/content_fixtures",
-            "version": "3.1.4",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/content_fixtures.git",
-                "reference": "3.1.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/content_fixtures-3.1.4.zip",
-                "reference": "3.1.4",
-                "shasum": "9a20035c2d8e312e6138a7b0991bb7c86581c716"
-            },
-            "require": {
-                "drupal/core": "^8.7.7 || ^9 || ^10",
-                "drush/drush": "^9 || ^10 || ^11 || ^12",
-                "php": ">=7.1.0"
-            },
-            "suggest": {
-                "fakerphp/faker": "Fake data generator. Generates multiple types of fake data.",
-                "joshtronic/php-loremipsum": "Lorem ipsum generator for dummy content."
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "3.1.4",
-                    "datestamp": "1689798618",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9 || ^10 || ^11 || ^12"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Łukasz Zaroda",
-                    "homepage": "https://www.drupal.org/user/1890152",
-                    "email": "luken@luken-tech.pl"
-                }
-            ],
-            "description": "Module privides an API for creating generators of dummy content in a way similar to the 'DoctrineFixturesBundle'.",
-            "homepage": "https://www.drupal.org/project/content_fixtures",
-            "support": {
-                "source": "https://git.drupalcode.org/project/content_fixtures"
-            }
-        }
-    ],
+    "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "drupal/citizen_proposal": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -o errexit -o errtrace -o noclobber -o nounset -o pipefail
+IFS=$'\n\t'
+
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+source "$script_dir/inc/helper"
+
+id=$(drush sql:query "SELECT nid FROM node_field_data WHERE type = 'citizen_proposal' LIMIT 1")
+
+if [ -z "$id" ]; then
+  (>&2 echo Cannot find citizen proposal id)
+  exit 1
+fi
+
+docker_compose exec phpfpm vendor/bin/drush citizen-proposal:test-mail:send "$id" create test@example.com
+
+open "http://$(docker_compose port mail 8025)"
